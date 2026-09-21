@@ -1,398 +1,620 @@
 /* ==========================================================================
    EL DOM VISUEL — Interactions du site
-   --------------------------------------------------------------------------
-   Sommaire
-   1.  Configuration
-   2.  En-tête collant
-   3.  Menu mobile
-   4.  Apparition au défilement
-   5.  Compteurs animés
-   6.  Lien de navigation actif (scrollspy)
-   7.  Filtres de la galerie
-   8.  Visionneuse (lightbox)
-   9.  Témoignages en rotation
-   10. Bouton retour en haut
-   11. Formulaire vers WhatsApp
-   12. Divers (année, défilement doux)
+   Aucune dépendance externe. Script exécuté après le chargement du DOM.
+
+   Sommaire :
+     1.  Réglages (à personnaliser)
+     2.  Petits utilitaires
+     3.  En-tête : état au défilement, menu mobile, lien actif
+     4.  Barre de progression et retour en haut
+     5.  Apparition au défilement
+     6.  Compteurs animés
+     7.  Réalisations : filtres et visionneuse
+     8.  Témoignages : carrousel automatique
+     9.  FAQ : accordéon
+     10. Formulaire : validation et envoi vers WhatsApp
+     11. Divers (année, lien WhatsApp flottant)
    ========================================================================== */
-'use strict';
 
 (function () {
+  'use strict';
 
-  /* ---------------------------- 1. CONFIGURATION -------------------------- */
-  const CONFIG = {
-    // ⚠️ À REMPLACER par votre numéro WhatsApp au format international, sans « + », espaces ni tirets.
-    // Exemple pour le Bénin : '22912345678'
+  /* =====================================================
+     1. RÉGLAGES — À PERSONNALISER
+     ===================================================== */
+  var CONFIG = {
+    /* Votre numéro WhatsApp au format international, sans « + », sans espace
+       et sans tiret. Exemple pour le Bénin : '22997123456'. */
     numeroWhatsApp: '22900000000',
 
-    // ⚠️ À REMPLACER par votre adresse e-mail de secours
+    /* Adresse e-mail affichée dans les messages pré-remplis. */
     emailContact: 'contact@eldomvisuel.com',
 
-    delaiTemoins: 7000   // durée d'affichage de chaque témoignage (ms)
+    /* Durée d'affichage d'un témoignage (millisecondes). */
+    delaiTemoins: 7000
   };
 
-  const $  = (sel, ctx = document) => ctx.querySelector(sel);
-  const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
-  const reduireMouvement = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* ------------------------- 2. EN-TÊTE COLLANT --------------------------- */
-  const entete = $('#entete');
-  const haut = $('#haut');
-
-  function majEntete() {
-    const y = window.scrollY;
-    if (entete) entete.classList.toggle('est-colle', y > 40);
-    if (haut) haut.classList.toggle('visible', y > 700);
+  /* =====================================================
+     2. PETITS UTILITAIRES
+     ===================================================== */
+  function $(selecteur, racine) {
+    return (racine || document).querySelector(selecteur);
   }
 
-  /* --------------------------- 3. MENU MOBILE ----------------------------- */
-  const burger = $('#burger');
-  const nav = $('#nav');
+  function $$(selecteur, racine) {
+    return Array.prototype.slice.call((racine || document).querySelectorAll(selecteur));
+  }
 
-  function fermerMenu() {
+  /* Limite la fréquence d'appel d'une fonction (défilement, redimensionnement). */
+  function limiter(fonction, delai) {
+    var minuteur = null;
+    return function () {
+      var args = arguments;
+      var contexte = this;
+      if (minuteur) return;
+      minuteur = setTimeout(function () {
+        minuteur = null;
+        fonction.apply(contexte, args);
+      }, delai || 100);
+    };
+  }
+
+  /* =====================================================
+     3. EN-TÊTE : ÉTAT AU DÉFILEMENT, MENU MOBILE, LIEN ACTIF
+     ===================================================== */
+  var entete = $('#entete');
+  var nav = $('#nav');
+  var burger = $('#burger');
+  var liensNav = $$('.nav__lien');
+  var sections = liensNav
+    .map(function (lien) {
+      var cible = lien.getAttribute('href');
+      return cible && cible.charAt(0) === '#' ? document.querySelector(cible) : null;
+    })
+    .filter(Boolean);
+
+  /* Ouvre ou ferme le menu plein écran sur mobile. */
+  function definirMenu(ouvert) {
     if (!nav || !burger) return;
-    nav.classList.remove('ouvert');
-    burger.classList.remove('ouvert');
-    burger.setAttribute('aria-expanded', 'false');
-    burger.setAttribute('aria-label', 'Ouvrir le menu');
-    document.body.style.overflow = '';
+    nav.classList.toggle('est-ouvert', ouvert);
+    burger.classList.toggle('est-actif', ouvert);
+    burger.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+    burger.setAttribute('aria-label', ouvert ? 'Fermer le menu' : 'Ouvrir le menu');
+    document.body.classList.toggle('est-ouvert', ouvert);
   }
 
-  if (burger && nav) {
-    burger.addEventListener('click', () => {
-      const ouvert = nav.classList.toggle('ouvert');
-      burger.classList.toggle('ouvert', ouvert);
-      burger.setAttribute('aria-expanded', String(ouvert));
-      burger.setAttribute('aria-label', ouvert ? 'Fermer le menu' : 'Ouvrir le menu');
-      document.body.style.overflow = ouvert ? 'hidden' : '';
-    });
-
-    // Fermer après un clic sur un lien
-    $$('a', nav).forEach(lien => lien.addEventListener('click', fermerMenu));
-
-    // Fermer avec la touche Échap
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') fermerMenu();
-    });
-
-    // Réinitialiser au retour en mode bureau
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 860) fermerMenu();
+  if (burger) {
+    burger.addEventListener('click', function () {
+      definirMenu(!nav.classList.contains('est-ouvert'));
     });
   }
 
-  /* --------------------- 4. APPARITION AU DÉFILEMENT ---------------------- */
-  const elementsReveal = $$('[data-reveal]');
-
-  if (reduireMouvement || !('IntersectionObserver' in window)) {
-    elementsReveal.forEach(el => el.classList.add('visible'));
-  } else {
-    const observateur = new IntersectionObserver((entrees, obs) => {
-      entrees.forEach((entree, i) => {
-        if (!entree.isIntersecting) return;
-        // Léger décalage pour un effet en cascade
-        setTimeout(() => entree.target.classList.add('visible'), i * 70);
-        obs.unobserve(entree.target);
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-
-    elementsReveal.forEach(el => observateur.observe(el));
-  }
-
-  /* -------------------------- 5. COMPTEURS ANIMÉS ------------------------- */
-  const compteurs = $$('[data-compteur]');
-
-  function animerCompteur(el) {
-    const cible = parseInt(el.dataset.compteur, 10) || 0;
-    if (reduireMouvement) { el.textContent = cible; return; }
-
-    const duree = 1500;
-    const debut = performance.now();
-
-    function etape(maintenant) {
-      const progression = Math.min((maintenant - debut) / duree, 1);
-      // Courbe d'accélération douce
-      const valeur = Math.round(cible * (1 - Math.pow(1 - progression, 3)));
-      el.textContent = valeur;
-      if (progression < 1) requestAnimationFrame(etape);
-      else el.textContent = cible;
+  /* Fermeture par la touche Échap. */
+  document.addEventListener('keydown', function (evenement) {
+    if (evenement.key === 'Escape') {
+      definirMenu(false);
+      fermerVisionneuse();
     }
-    requestAnimationFrame(etape);
-  }
+  });
 
-  if (compteurs.length && 'IntersectionObserver' in window) {
-    const obsCompteur = new IntersectionObserver((entrees, obs) => {
-      entrees.forEach(entree => {
-        if (!entree.isIntersecting) return;
-        animerCompteur(entree.target);
-        obs.unobserve(entree.target);
-      });
-    }, { threshold: 0.5 });
-    compteurs.forEach(el => obsCompteur.observe(el));
-  } else {
-    compteurs.forEach(el => { el.textContent = el.dataset.compteur; });
-  }
-
-  /* -------------------- 6. LIEN DE NAVIGATION ACTIF ---------------------- */
-  const sections = $$('main section[id]');
-  const liensNav = $$('.nav__liste a');
-
-  function majLienActif() {
-    const position = window.scrollY + 140;
-    let courante = '';
-    sections.forEach(section => {
-      if (section.offsetTop <= position) courante = section.id;
-    });
-    liensNav.forEach(lien => {
-      lien.classList.toggle('actif', lien.getAttribute('href') === '#' + courante);
-    });
-  }
-
-  /* --------------------- 7. FILTRES DE LA GALERIE ------------------------ */
-  const boutonsFiltre = $$('.filtre');
-  const projets = $$('.projet');
-
-  boutonsFiltre.forEach(bouton => {
-    bouton.addEventListener('click', () => {
-      boutonsFiltre.forEach(b => b.classList.remove('actif'));
-      bouton.classList.add('actif');
-
-      const choix = bouton.dataset.filtre;
-      projets.forEach(projet => {
-        const correspond = choix === 'tout' || projet.dataset.cat === choix;
-        projet.classList.toggle('masque', !correspond);
-        if (correspond) {
-          projet.classList.remove('visible');
-          // Petite ré-entrée animée
-          requestAnimationFrame(() => {
-            setTimeout(() => projet.classList.add('visible'), 40);
-          });
-        }
-      });
+  /* Fermeture après un clic sur un lien du menu. */
+  liensNav.forEach(function (lien) {
+    lien.addEventListener('click', function () {
+      definirMenu(false);
     });
   });
 
-  /* --------------------------- 8. VISIONNEUSE ---------------------------- */
-  const visionneuse = $('#visionneuse');
-  const vImg = $('#visionneuseImg');
-  const vLegende = $('#visionneuseLegende');
-  let indexCourant = 0;
-  let dernierFocus = null;
+  /* Retour à la disposition normale si la fenêtre repasse en grand écran. */
+  window.addEventListener('resize', limiter(function () {
+    if (window.innerWidth > 900) definirMenu(false);
+  }, 200));
 
+  /* Lien actif selon la section visible (scrollspy). */
+  function majLienActif() {
+    if (!sections.length) return;
+
+    var repere = window.scrollY + (window.innerHeight * 0.35);
+    var indexActif = 0;
+
+    sections.forEach(function (section, index) {
+      if (section.offsetTop <= repere) indexActif = index;
+    });
+
+    /* En bas de page, on met en avant la dernière section atteignable. */
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 4) {
+      indexActif = sections.length - 1;
+    }
+
+    liensNav.forEach(function (lien, index) {
+      var actif = index === indexActif;
+      lien.classList.toggle('est-actif', actif);
+      if (actif) {
+        lien.setAttribute('aria-current', 'true');
+      } else {
+        lien.removeAttribute('aria-current');
+      }
+    });
+  }
+
+  /* =====================================================
+     4. BARRE DE PROGRESSION ET RETOUR EN HAUT
+     ===================================================== */
+  var progression = $('#progression');
+  var boutonHaut = $('#haut');
+
+  function majDefilement() {
+    var hauteurTotale = document.documentElement.scrollHeight - window.innerHeight;
+    var position = window.scrollY;
+    var ratio = hauteurTotale > 0 ? (position / hauteurTotale) * 100 : 0;
+
+    if (progression) progression.style.width = ratio + '%';
+    if (entete) entete.classList.toggle('est-colle', position > 24);
+    if (boutonHaut) boutonHaut.classList.toggle('est-visible', position > 600);
+
+    majLienActif();
+  }
+
+  window.addEventListener('scroll', limiter(majDefilement, 40), { passive: true });
+
+  if (boutonHaut) {
+    boutonHaut.addEventListener('click', function () {
+      var doux = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: doux ? 'smooth' : 'auto' });
+    });
+  }
+
+  /* =====================================================
+     5. APPARITION AU DÉFILEMENT
+     ===================================================== */
+  var elementsRevele = $$('[data-reveal]');
+
+  if ('IntersectionObserver' in window && elementsRevele.length) {
+    var observateur = new IntersectionObserver(function (entrees) {
+      entrees.forEach(function (entree) {
+        if (entree.isIntersecting) {
+          entree.target.classList.add('est-revele');
+          observateur.unobserve(entree.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+    elementsRevele.forEach(function (element) {
+      observateur.observe(element);
+    });
+  } else {
+    /* Repli : on affiche tout d'un coup si l'observateur n'existe pas. */
+    elementsRevele.forEach(function (element) {
+      element.classList.add('est-revele');
+    });
+  }
+
+  /* =====================================================
+     6. COMPTEURS ANIMÉS
+     ===================================================== */
+  var compteurs = $$('[data-compteur]');
+
+  function animerCompteur(element) {
+    var cible = parseFloat(element.getAttribute('data-compteur')) || 0;
+    var duree = 1600;
+    var debut = null;
+
+    function etape(horodatage) {
+      if (!debut) debut = horodatage;
+      var avancement = Math.min((horodatage - debut) / duree, 1);
+      /* Courbe d'accélération douce pour un rendu naturel. */
+      var progresse = 1 - Math.pow(1 - avancement, 3);
+      element.textContent = Math.round(cible * progresse).toLocaleString('fr-FR');
+
+      if (avancement < 1) {
+        requestAnimationFrame(etape);
+      } else {
+        element.textContent = cible.toLocaleString('fr-FR');
+      }
+    }
+
+    requestAnimationFrame(etape);
+  }
+
+  if (compteurs.length) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      compteurs.forEach(function (element) {
+        element.textContent = parseFloat(element.getAttribute('data-compteur')).toLocaleString('fr-FR');
+      });
+    } else if ('IntersectionObserver' in window) {
+      var observateurCompteurs = new IntersectionObserver(function (entrees) {
+        entrees.forEach(function (entree) {
+          if (entree.isIntersecting) {
+            animerCompteur(entree.target);
+            observateurCompteurs.unobserve(entree.target);
+          }
+        });
+      }, { threshold: 0.6 });
+
+      compteurs.forEach(function (element) {
+        observateurCompteurs.observe(element);
+      });
+    } else {
+      compteurs.forEach(animerCompteur);
+    }
+  }
+
+  /* =====================================================
+     7. RÉALISATIONS : FILTRES ET VISIONNEUSE
+     ===================================================== */
+  var galerie = $('#galerie');
+  var projets = $$('.projet');
+  var filtres = $$('.filtre');
+
+  filtres.forEach(function (bouton) {
+    bouton.addEventListener('click', function () {
+      var categorie = bouton.getAttribute('data-filtre');
+
+      filtres.forEach(function (autre) {
+        var actif = autre === bouton;
+        autre.classList.toggle('est-actif', actif);
+        autre.setAttribute('aria-pressed', actif ? 'true' : 'false');
+      });
+
+      projets.forEach(function (projet) {
+        var correspond = categorie === 'tout' || projet.getAttribute('data-cat') === categorie;
+        projet.classList.toggle('est-masque', !correspond);
+      });
+
+      if (galerie) {
+        galerie.classList.remove('est-filtre');
+        /* Force la réactivation de l'animation d'apparition. */
+        void galerie.offsetWidth;
+        galerie.classList.add('est-filtre');
+      }
+    });
+  });
+
+  /* --- Visionneuse plein écran --- */
+  var visionneuse = $('#visionneuse');
+  var visionneuseImg = $('#visionneuseImg');
+  var visionneuseLegende = $('#visionneuseLegende');
+  var btnFermer = $('#visionneuseFermer');
+  var btnPrec = $('#visionneusePrec');
+  var btnSuiv = $('#visionneuseSuiv');
+  var indexCourant = 0;
+  var dernierFocus = null;
+
+  /* Liste des projets actuellement visibles (utile après un filtrage). */
   function projetsVisibles() {
-    return projets.filter(p => !p.classList.contains('masque'));
+    return projets.filter(function (projet) {
+      return !projet.classList.contains('est-masque');
+    });
   }
 
   function afficherProjet(index) {
-    const liste = projetsVisibles();
+    var liste = projetsVisibles();
     if (!liste.length) return;
+
+    /* Bouclage circulaire. */
     indexCourant = (index + liste.length) % liste.length;
 
-    const projet = liste[indexCourant];
-    const img = $('img', projet);
-    const titre = $('h3', projet);
-    const cat = $('.projet__cat', projet);
+    var projet = liste[indexCourant];
+    var image = $('img', projet);
+    if (!image || !visionneuseImg) return;
 
-    if (!img) return;
-    vImg.src = img.getAttribute('src');
-    vImg.alt = img.getAttribute('alt') || '';
-    vLegende.textContent = (cat ? cat.textContent + ' — ' : '') + (titre ? titre.textContent : '');
+    visionneuseImg.src = image.currentSrc || image.src;
+    visionneuseImg.alt = image.alt || '';
+
+    var detail = projet.getAttribute('data-detail') || '';
+    var titre = projet.getAttribute('data-titre') || '';
+    if (visionneuseLegende) {
+      visionneuseLegende.textContent = titre + (detail ? ' — ' + detail : '');
+    }
   }
 
   function ouvrirVisionneuse(projet) {
     if (!visionneuse) return;
+
     dernierFocus = document.activeElement;
-    const liste = projetsVisibles();
-    afficherProjet(liste.indexOf(projet));
+    var liste = projetsVisibles();
+    indexCourant = Math.max(0, liste.indexOf(projet));
+
+    afficherProjet(indexCourant);
+
     visionneuse.hidden = false;
-    document.body.style.overflow = 'hidden';
-    const fermer = $('#visionneuseFermer');
-    if (fermer) fermer.focus();
+    document.body.classList.add('est-ouvert');
+
+    /* Petite pause pour laisser le navigateur appliquer « hidden = false ». */
+    requestAnimationFrame(function () {
+      visionneuse.classList.add('est-visible');
+    });
+
+    if (btnFermer) btnFermer.focus();
   }
 
   function fermerVisionneuse() {
     if (!visionneuse || visionneuse.hidden) return;
-    visionneuse.hidden = true;
-    document.body.style.overflow = '';
-    if (dernierFocus && dernierFocus.focus) dernierFocus.focus();
+
+    visionneuse.classList.remove('est-visible');
+    document.body.classList.remove('est-ouvert');
+
+    setTimeout(function () {
+      visionneuse.hidden = true;
+      if (dernierFocus && typeof dernierFocus.focus === 'function') dernierFocus.focus();
+    }, 260);
   }
 
-  if (visionneuse) {
-    projets.forEach(projet => {
-      projet.setAttribute('tabindex', '0');
-      projet.setAttribute('role', 'button');
-      projet.addEventListener('click', () => ouvrirVisionneuse(projet));
-      projet.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          ouvrirVisionneuse(projet);
-        }
-      });
+  projets.forEach(function (projet) {
+    projet.addEventListener('click', function () {
+      ouvrirVisionneuse(projet);
     });
 
-    const btnFermer = $('#visionneuseFermer');
-    const btnPrec = $('#visionneusePrec');
-    const btnSuiv = $('#visionneuseSuiv');
-
-    if (btnFermer) btnFermer.addEventListener('click', fermerVisionneuse);
-    if (btnPrec) btnPrec.addEventListener('click', () => afficherProjet(indexCourant - 1));
-    if (btnSuiv) btnSuiv.addEventListener('click', () => afficherProjet(indexCourant + 1));
-    visionneuse.addEventListener('click', e => { if (e.target === visionneuse) fermerVisionneuse(); });
-
-    document.addEventListener('keydown', e => {
-      if (visionneuse.hidden) return;
-      if (e.key === 'Escape') fermerVisionneuse();
-      if (e.key === 'ArrowLeft') afficherProjet(indexCourant - 1);
-      if (e.key === 'ArrowRight') afficherProjet(indexCourant + 1);
-    });
-
-    // Navigation au glissement (mobile)
-    let departX = null;
-    visionneuse.addEventListener('touchstart', e => { departX = e.changedTouches[0].clientX; }, { passive: true });
-    visionneuse.addEventListener('touchend', e => {
-      if (departX === null) return;
-      const delta = e.changedTouches[0].clientX - departX;
-      if (Math.abs(delta) > 55) afficherProjet(indexCourant + (delta < 0 ? 1 : -1));
-      departX = null;
-    }, { passive: true });
-  }
-
-  /* ---------------------- 9. TÉMOIGNAGES EN ROTATION --------------------- */
-  const temoins = $$('.temoin');
-  const zonePoints = $('#temoinsPoints');
-  let temoinActif = 0;
-  let minuteurTemoins = null;
-
-  function afficherTemoin(index) {
-    if (!temoins.length) return;
-    temoinActif = (index + temoins.length) % temoins.length;
-    temoins.forEach((t, i) => t.classList.toggle('actif', i === temoinActif));
-    if (zonePoints) {
-      $$('button', zonePoints).forEach((p, i) => p.classList.toggle('actif', i === temoinActif));
-    }
-  }
-
-  function demarrerRotation() {
-    if (temoins.length < 2 || reduireMouvement) return;
-    arreterRotation();
-    minuteurTemoins = setInterval(() => afficherTemoin(temoinActif + 1), CONFIG.delaiTemoins);
-  }
-
-  function arreterRotation() {
-    if (minuteurTemoins) clearInterval(minuteurTemoins);
-    minuteurTemoins = null;
-  }
-
-  if (temoins.length && zonePoints) {
-    temoins.forEach((_, i) => {
-      const point = document.createElement('button');
-      point.type = 'button';
-      point.setAttribute('aria-label', 'Afficher le témoignage ' + (i + 1));
-      point.addEventListener('click', () => { afficherTemoin(i); demarrerRotation(); });
-      zonePoints.appendChild(point);
-    });
-
-    afficherTemoin(0);
-    demarrerRotation();
-
-    const zone = $('#temoins');
-    if (zone) {
-      zone.addEventListener('mouseenter', arreterRotation);
-      zone.addEventListener('mouseleave', demarrerRotation);
-    }
-    document.addEventListener('visibilitychange', () => {
-      document.hidden ? arreterRotation() : demarrerRotation();
-    });
-  }
-
-  /* --------------------- 10. BOUTON RETOUR EN HAUT ----------------------- */
-  if (haut) {
-    haut.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: reduireMouvement ? 'auto' : 'smooth' });
-    });
-  }
-
-  /* ------------------- 11. FORMULAIRE VERS WHATSAPP ---------------------- */
-  const formulaire = $('#formulaire');
-  const statut = $('#statut');
-
-  if (formulaire) {
-    formulaire.addEventListener('submit', e => {
-      e.preventDefault();
-
-      const donnees = new FormData(formulaire);
-      const nom     = (donnees.get('nom') || '').toString().trim();
-      const tel     = (donnees.get('tel') || '').toString().trim();
-      const service = (donnees.get('service') || '').toString().trim();
-      const budget  = (donnees.get('budget') || '').toString().trim();
-      const message = (donnees.get('message') || '').toString().trim();
-
-      if (!nom || !service || !message) {
-        if (statut) {
-          statut.textContent = 'Merci de remplir les champs marqués d\'un astérisque (*).';
-          statut.classList.add('erreur');
-        }
-        formulaire.reportValidity();
-        return;
+    /* Ouverture au clavier (Entrée ou Espace) sur les vignettes. */
+    projet.addEventListener('keydown', function (evenement) {
+      if (evenement.key === 'Enter' || evenement.key === ' ') {
+        evenement.preventDefault();
+        ouvrirVisionneuse(projet);
       }
-
-      const lignes = [
-        'Bonjour EL DOM VISUEL,',
-        '',
-        'Nom : ' + nom
-      ];
-      if (tel)     lignes.push('Téléphone : ' + tel);
-      lignes.push('Service souhaité : ' + service);
-      if (budget)  lignes.push('Budget : ' + budget);
-      lignes.push('', 'Projet :', message);
-      lignes.push('', '— Message envoyé depuis le site eldomvisuel.com');
-
-      const texte = encodeURIComponent(lignes.join('\n'));
-      const url = 'https://wa.me/' + CONFIG.numeroWhatsApp + '?text=' + texte;
-
-      if (statut) {
-        statut.classList.remove('erreur');
-        statut.textContent = 'Ouverture de WhatsApp… Si rien ne se passe, écrivez-nous à ' + CONFIG.emailContact + '.';
-      }
-
-      window.open(url, '_blank', 'noopener');
-    });
-  }
-
-  /* ------------------------------ 12. DIVERS ----------------------------- */
-  const annee = $('#annee');
-  if (annee) annee.textContent = new Date().getFullYear();
-
-  // Défilement doux pour les ancres internes
-  $$('a[href^="#"]').forEach(lien => {
-    lien.addEventListener('click', e => {
-      const id = lien.getAttribute('href');
-      if (!id || id === '#') return;
-      const cible = document.querySelector(id);
-      if (!cible) return;
-      e.preventDefault();
-      const decalage = entete ? entete.offsetHeight + 16 : 0;
-      const position = cible.getBoundingClientRect().top + window.scrollY - decalage + 10;
-      window.scrollTo({ top: position, behavior: reduireMouvement ? 'auto' : 'smooth' });
-      // Mettre à jour l'URL sans casser le défilement
-      if (history.replaceState) history.replaceState(null, '', id);
     });
   });
 
-  // Écouteurs de défilement regroupés (performances)
-  let enAttente = false;
-  function surDefilement() {
-    if (enAttente) return;
-    enAttente = true;
-    requestAnimationFrame(() => {
-      majEntete();
-      majLienActif();
-      enAttente = false;
+  if (btnFermer) btnFermer.addEventListener('click', fermerVisionneuse);
+  if (btnPrec) btnPrec.addEventListener('click', function () { afficherProjet(indexCourant - 1); });
+  if (btnSuiv) btnSuiv.addEventListener('click', function () { afficherProjet(indexCourant + 1); });
+
+  /* Clic sur le fond sombre : fermeture. */
+  if (visionneuse) {
+    visionneuse.addEventListener('click', function (evenement) {
+      if (evenement.target === visionneuse) fermerVisionneuse();
     });
   }
 
-  window.addEventListener('scroll', surDefilement, { passive: true });
-  majEntete();
-  majLienActif();
+  /* Navigation au clavier dans la visionneuse. */
+  document.addEventListener('keydown', function (evenement) {
+    if (!visionneuse || visionneuse.hidden) return;
 
+    if (evenement.key === 'ArrowRight') {
+      evenement.preventDefault();
+      afficherProjet(indexCourant + 1);
+    }
+    if (evenement.key === 'ArrowLeft') {
+      evenement.preventDefault();
+      afficherProjet(indexCourant - 1);
+    }
+  });
+
+  /* Navigation par balayage tactile. */
+  if (visionneuse) {
+    var departX = 0;
+
+    visionneuse.addEventListener('touchstart', function (evenement) {
+      departX = evenement.changedTouches[0].clientX;
+    }, { passive: true });
+
+    visionneuse.addEventListener('touchend', function (evenement) {
+      var ecart = evenement.changedTouches[0].clientX - departX;
+      if (Math.abs(ecart) > 55) {
+        afficherProjet(ecart < 0 ? indexCourant + 1 : indexCourant - 1);
+      }
+    }, { passive: true });
+  }
+
+  /* =====================================================
+     8. TÉMOIGNAGES : CARROUSEL AUTOMATIQUE
+     ===================================================== */
+  var temoins = $$('.temoin');
+  var conteneurPoints = $('#temoinsPoints');
+  var compteurTemoin = 0;
+  var minuteurTemoin = null;
+
+  if (temoins.length && conteneurPoints) {
+    temoins.forEach(function (temoin, index) {
+      var point = document.createElement('button');
+      point.type = 'button';
+      point.className = 'temoin-point' + (index === 0 ? ' est-actif' : '');
+      point.setAttribute('aria-label', 'Afficher le témoignage ' + (index + 1) + ' sur ' + temoins.length);
+      point.setAttribute('aria-pressed', index === 0 ? 'true' : 'false');
+
+      point.addEventListener('click', function () {
+        afficherTemoin(index);
+        relancerMinuteur();
+      });
+
+      conteneurPoints.appendChild(point);
+    });
+  }
+
+  var pointsTemoins = $$('.temoin-point');
+
+  function afficherTemoin(index) {
+    if (!temoins.length) return;
+
+    compteurTemoin = (index + temoins.length) % temoins.length;
+
+    temoins.forEach(function (temoin, i) {
+      temoin.classList.toggle('est-actif', i === compteurTemoin);
+    });
+
+    pointsTemoins.forEach(function (point, i) {
+      var actif = i === compteurTemoin;
+      point.classList.toggle('est-actif', actif);
+      point.setAttribute('aria-pressed', actif ? 'true' : 'false');
+    });
+  }
+
+  function relancerMinuteur() {
+    if (minuteurTemoin) clearInterval(minuteurTemoin);
+
+    if (temoins.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      minuteurTemoin = setInterval(function () {
+        afficherTemoin(compteurTemoin + 1);
+      }, CONFIG.delaiTemoins);
+    }
+  }
+
+  /* Mise en pause au survol, pour laisser le temps de lire. */
+  var blocTemoins = $('#temoins');
+  if (blocTemoins) {
+    blocTemoins.addEventListener('mouseenter', function () {
+      if (minuteurTemoin) clearInterval(minuteurTemoin);
+    });
+    blocTemoins.addEventListener('mouseleave', relancerMinuteur);
+  }
+
+  relancerMinuteur();
+
+  /* =====================================================
+     9. FAQ : ACCORDÉON (une seule réponse ouverte à la fois)
+     ===================================================== */
+  var questions = $$('.question');
+
+  questions.forEach(function (question) {
+    var bouton = $('.question__bouton', question);
+    if (!bouton) return;
+
+    bouton.addEventListener('click', function () {
+      var etaitOuverte = question.classList.contains('est-ouvert');
+
+      questions.forEach(function (autre) {
+        autre.classList.remove('est-ouvert');
+        var autreBouton = $('.question__bouton', autre);
+        if (autreBouton) autreBouton.setAttribute('aria-expanded', 'false');
+      });
+
+      if (!etaitOuverte) {
+        question.classList.add('est-ouvert');
+        bouton.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  /* =====================================================
+     10. FORMULAIRE : VALIDATION ET ENVOI VERS WHATSAPP
+     ===================================================== */
+  var formulaire = $('#formulaire');
+  var statut = $('#statut');
+
+  function marquerChamp(champ, message) {
+    var bloc = champ.closest('.champ');
+    if (!bloc) return;
+
+    var zoneErreur = $('[data-erreur]', bloc);
+
+    if (message) {
+      bloc.classList.add('est-invalide');
+      champ.setAttribute('aria-invalid', 'true');
+      if (zoneErreur) zoneErreur.textContent = message;
+    } else {
+      bloc.classList.remove('est-invalide');
+      champ.removeAttribute('aria-invalid');
+      if (zoneErreur) zoneErreur.textContent = '';
+    }
+  }
+
+  /* Vérifie un champ et renvoie true si la valeur est acceptable. */
+  function validerChamp(champ) {
+    var valeur = (champ.value || '').trim();
+
+    if (champ.hasAttribute('required') && !valeur) {
+      marquerChamp(champ, 'Ce champ est obligatoire.');
+      return false;
+    }
+
+    if (champ.type === 'email' && valeur && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(valeur)) {
+      marquerChamp(champ, 'Adresse e-mail invalide.');
+      return false;
+    }
+
+    if (champ.type === 'tel' && valeur && valeur.replace(/[^\d]/g, '').length < 8) {
+      marquerChamp(champ, 'Numéro trop court.');
+      return false;
+    }
+
+    if (champ.id === 'message' && valeur && valeur.length < 12) {
+      marquerChamp(champ, 'Décrivez votre projet en quelques mots de plus (12 caractères minimum).');
+      return false;
+    }
+
+    marquerChamp(champ, '');
+    return true;
+  }
+
+  if (formulaire) {
+    var champs = $$('input, select, textarea', formulaire);
+
+    /* Nettoyage de l'erreur dès que l'utilisateur corrige. */
+    champs.forEach(function (champ) {
+      champ.addEventListener('input', function () {
+        var bloc = champ.closest('.champ');
+        if (bloc && bloc.classList.contains('est-invalide')) validerChamp(champ);
+      });
+
+      champ.addEventListener('blur', function () {
+        if (champ.hasAttribute('required')) validerChamp(champ);
+      });
+    });
+
+    formulaire.addEventListener('submit', function (evenement) {
+      evenement.preventDefault();
+
+      var premierInvalide = null;
+
+      champs.forEach(function (champ) {
+        if (!validerChamp(champ) && !premierInvalide) premierInvalide = champ;
+      });
+
+      if (premierInvalide) {
+        premierInvalide.focus();
+        if (statut) {
+          statut.textContent = 'Merci de corriger les champs signalés avant l\'envoi.';
+        }
+        return;
+      }
+
+      /* Construction du message pré-rempli. */
+      var donnees = new FormData(formulaire);
+      var lignes = [
+        'Bonjour EL DOM VISUEL,',
+        '',
+        'Nom : ' + (donnees.get('nom') || '—'),
+        'Téléphone : ' + (donnees.get('tel') || 'non renseigné'),
+        'Projet : ' + (donnees.get('service') || '—'),
+        'Budget : ' + (donnees.get('budget') || 'à définir'),
+        '',
+        'Détails :',
+        (donnees.get('message') || '—'),
+        '',
+        'Message envoyé depuis votre site.'
+      ];
+
+      var texte = encodeURIComponent(lignes.join('\n'));
+      var lien = 'https://wa.me/' + CONFIG.numeroWhatsApp + '?text=' + texte;
+
+      window.open(lien, '_blank', 'noopener');
+
+      if (statut) {
+        statut.textContent = 'Merci ' + (donnees.get('nom') || '') +
+          ' ! WhatsApp s\'ouvre avec votre message. Si rien ne se passe, écrivez-nous à ' +
+          CONFIG.emailContact + '.';
+      }
+
+      formulaire.reset();
+    });
+  }
+
+  /* =====================================================
+     11. DIVERS
+     ===================================================== */
+  /* Année courante dans le pied de page. */
+  var annee = $('#annee');
+  if (annee) annee.textContent = new Date().getFullYear();
+
+  /* Lien WhatsApp flottant. */
+  var lienWhatsApp = $('#whatsapp');
+  if (lienWhatsApp) {
+    var messageFlottant = encodeURIComponent(
+      'Bonjour EL DOM VISUEL, je souhaite un devis pour un projet visuel.'
+    );
+    lienWhatsApp.href = 'https://wa.me/' + CONFIG.numeroWhatsApp + '?text=' + messageFlottant;
+    lienWhatsApp.target = '_blank';
+    lienWhatsApp.rel = 'noopener';
+  }
+
+  /* Premier calcul de l'état de la page. */
+  majDefilement();
 })();

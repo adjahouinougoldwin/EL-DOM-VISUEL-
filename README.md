@@ -1,101 +1,110 @@
 # EL DOM VISUEL — Site officiel
 
-Site vitrine **one-page** du studio de création visuelle EL DOM VISUEL : miniatures,
-photographie, vidéo, montage et identité de marque.
+Site vitrine **one-page** du studio de création visuelle **EL DOM VISUEL** :
+miniatures, photographie, vidéo, montage et identité de marque.
+
+> Votre image. **Notre signature.**
 
 ## Aperçu
 
 | | |
 |---|---|
-| **Type** | Site statique (HTML + CSS + JavaScript, aucune dépendance, aucune compilation) |
+| **Type** | Site statique — HTML, CSS, JavaScript, aucune dépendance, aucune compilation |
 | **Langue** | Français |
 | **Thème** | Sombre, accents dorés |
 | **Responsive** | Oui — mobile, tablette, ordinateur |
-| **Poids** | ~1,5 Mo (dont ~1,4 Mo d'images) |
+| **Poids** | ~1,8 Mo, dont ~1,7 Mo d'images |
 
 ## Structure des fichiers
 
 ```
 .
 ├── index.html                 # Page unique (toutes les sections)
-├── favicon.svg                # Icône du site (diaphragme doré)
-├── robots.txt                 # Indexation moteurs de recherche
+├── favicon.svg                # Icône du site
+├── robots.txt                 # Indexation par les moteurs de recherche
 ├── sitemap.xml                # Plan du site
 └── assets/
-    ├── css/style.css          # Feuille de style complète (commentée)
-    ├── js/main.js             # Interactions (commenté)
-    └── img/                   # Visuels du site (8 images)
-        ├── hero.jpg           # Image d'accueil
-        ├── miniature.jpg      # Réalisation — miniatures
-        ├── portrait.jpg       # Réalisation — photo & section À propos
-        ├── clip.jpg           # Réalisation — clip musical
+    ├── css/
+    │   └── style.css          # Feuille de style unique et commentée
+    ├── js/
+    │   └── main.js            # Interactions, commentées, sans dépendance
+    └── img/
+        ├── logo.svg           # Logo (objectif + lecture, doré)
+        ├── hero.jpg           # Accueil
+        ├── miniature.jpg      # Réalisation — miniature gaming
+        ├── podcast.jpg        # Réalisation — miniature podcast
+        ├── portrait.jpg       # Réalisation — portrait studio
+        ├── clip.jpg           # Réalisation — tournage de clip
         ├── mariage.jpg        # Réalisation — mariage
         ├── montage.jpg        # Réalisation — post-production
         ├── branding.jpg       # Réalisation — identité de marque
-        └── evenement.jpg      # Réalisation — conférence
+        ├── evenement.jpg      # Réalisation — conférence
+        └── about.jpg          # Section « À propos »
 ```
 
 ## Sections de la page
 
-1. **Accueil** — titre principal, boutons d'action, chiffres clés animés
-2. **Services** — 6 prestations détaillées
-3. **Réalisations** — galerie filtrable avec visionneuse plein écran
-4. **Méthode** — les 4 étapes d'un projet
-5. **À propos** — présentation du studio et points forts
-6. **Témoignages** — carrousel automatique
-7. **Tarifs** — 3 formules (Essentiel / Studio / Signature)
-8. **FAQ** — 5 questions en accordéon
-9. **Contact** — coordonnées + formulaire qui envoie vers WhatsApp
+1. **Accueil** — titre, accroche, boutons d'action, quatre chiffres clés animés
+2. **Bandeau défilant** — les spécialités du studio
+3. **Services** — six prestations détaillées
+4. **Réalisations** — galerie filtrable par catégorie, avec visionneuse plein écran
+5. **Méthode** — les quatre étapes d'un projet
+6. **À propos** — présentation du studio et points forts
+7. **Témoignages** — carrousel automatique (mise en pause au survol)
+8. **Tarifs** — trois formules : Essentiel, Studio, Signature
+9. **FAQ** — cinq questions en accordéon
+10. **Contact** — coordonnées et formulaire qui prépare un message WhatsApp
 
 ## ✏️ À personnaliser avant la mise en ligne
 
-Trois endroits contiennent des informations provisoires à remplacer :
+### 1. Le numéro WhatsApp et l'e-mail — `assets/js/main.js`
 
-### 1. Le numéro WhatsApp — `assets/js/main.js`
+En haut du fichier, dans `CONFIG` :
 
 ```js
-const CONFIG = {
-  numeroWhatsApp: '22900000000',   // ← votre numéro, format international, sans "+"
+var CONFIG = {
+  numeroWhatsApp: '22900000000',            // ← votre numéro, format international
   emailContact: 'contact@eldomvisuel.com',
   delaiTemoins: 7000
 };
 ```
 
-Format attendu : indicatif pays + numéro, **sans** `+`, espace ni tiret.
-Exemple : `22997123456`.
+Le numéro s'écrit **sans** `+`, sans espace et sans tiret. Exemple : `22997123456`.
+Ce numéro alimente le bouton flottant WhatsApp et le formulaire de contact.
 
 ### 2. Les coordonnées affichées — `index.html`
 
-Recherchez `22900000000` et `contact@eldomvisuel.com` (ils apparaissent dans la
-section **Contact** et dans le **pied de page**) ainsi que la ville :
+Recherchez `22900000000` et `contact@eldomvisuel.com` : ils apparaissent dans la
+section **Contact**, dans le pied de page et dans les données structurées (JSON-LD).
+La ville est indiquée juste en dessous :
 
 ```html
-<span>Abomey-Calavi, Bénin — interventions sur site</span>
+<p>Abomey-Calavi, Bénin — interventions sur site</p>
 ```
 
-Les liens de réseaux sociaux sont juste sous `<div class="contact__reseaux">` :
-remplacez `href="#"` par vos vraies URL (Facebook, Instagram, TikTok, YouTube).
+Les liens de réseaux sociaux se trouvent sous `<div class="contact__reseaux">` :
+remplacez les `href="#"` par vos vraies adresses (Facebook, Instagram, TikTok, YouTube).
 
 ### 3. Le domaine — `index.html`, `robots.txt`, `sitemap.xml`
 
 Remplacez `https://eldomvisuel.com` par votre adresse réelle (balises `canonical`,
-Open Graph, JSON-LD, sitemap).
+Open Graph, JSON-LD et sitemap).
 
-### Contenu à ajuster éventuellement
+### 4. Le contenu
 
-- **Chiffres clés** (`data-compteur="180"` etc.) dans la section Accueil
-- **Tarifs** dans la section `#tarifs`
-- **Témoignages** — remplacez-les par de vrais retours clients
-- **Images** — remplacez les fichiers du dossier `assets/img/` en gardant les mêmes
-  noms, ou changez les chemins dans `index.html`. Format conseillé : JPEG ou WebP,
-  largeur 1600 px, moins de 300 Ko.
+- **Chiffres clés** — attributs `data-compteur="180"`, `45`, `48`, `98` dans la section Accueil
+- **Tarifs** — section `#tarifs` (`25 000` et `85 000` FCFA)
+- **Témoignages** — à remplacer par de vrais retours clients (section `#temoignages`)
+- **Images** — remplacez les fichiers de `assets/img/` en gardant les mêmes noms, ou
+  modifiez les chemins dans `index.html`. Format conseillé : JPEG ou WebP, 1600 px de
+  large, moins de 300 Ko.
 
 ## Lancer le site en local
 
-Aucune installation n'est nécessaire. Deux options :
+Aucune installation n'est nécessaire :
 
 ```bash
-# Option 1 — Python (déjà installé sur la plupart des systèmes)
+# Option 1 — Python
 python3 -m http.server 8000
 
 # Option 2 — Node.js
@@ -108,36 +117,38 @@ Puis ouvrez <http://localhost:8000>.
 
 ### GitHub Pages
 
-1. Poussez le contenu de ce dépôt sur la branche `main`.
+1. Le contenu du dépôt doit être sur la branche `main`.
 2. Sur GitHub : **Settings → Pages**.
 3. *Source* : `Deploy from a branch` — *Branch* : `main` — dossier `/ (root)`.
-4. Enregistrez. Le site sera disponible à
+4. Enregistrez. Le site est publié à l'adresse
    `https://adjahouinougoldwin.github.io/EL-DOM-VISUEL-/` en une minute environ.
 
 ### Netlify / Vercel
 
-Glissez-déposez le dossier du projet sur <https://app.netlify.com/drop>, ou
-connectez le dépôt GitHub : aucune commande de build n'est requise,
-le dossier de publication est la racine (`.`).
+Glissez-déposez le dossier du projet sur <https://app.netlify.com/drop>, ou connectez
+le dépôt GitHub : aucune commande de compilation n'est requise, le dossier à publier
+est la racine (`.`).
 
 ## Fonctionnalités techniques
 
-- Navigation collante avec lien actif suivi au défilement (*scrollspy*)
-- Menu plein écran sur mobile, fermeture par `Échap` ou clic sur un lien
-- Animations d'apparition au défilement et compteurs animés
-- Galerie filtrable par catégorie
-- Visionneuse plein écran : flèches du clavier, balayage tactile, `Échap`
-- Formulaire de contact qui pré-remplit un message WhatsApp
-- Respect de `prefers-reduced-motion` (animations désactivées si l'utilisateur le demande)
-- Feuille d'impression pour un rendu propre à l'impression
-- Balisage sémantique, `aria-*`, lien d'évitement, focus visibles
-- SEO : métadonnées, Open Graph, données structurées schema.org
+- En-tête collant avec lien actif suivi au défilement (*scrollspy*) et barre de progression
+- Menu plein écran sur mobile : fermeture par `Échap`, par un lien ou au redimensionnement
+- Apparition progressive des blocs au défilement et compteurs animés (une seule fois)
+- Galerie filtrable par catégorie, animée à chaque changement de filtre
+- Visionneuse plein écran : flèches du clavier, balayage tactile, `Échap`, clic sur le fond
+- Formulaire validé côté client (messages d'erreur par champ) puis envoi vers WhatsApp
+- Respect de `prefers-reduced-motion` : animations neutralisées si l'utilisateur le demande
+- Feuille d'impression : FAQ dépliée, éléments flottants masqués
+- Balisage sémantique, attributs `aria-*`, lien d'évitement, focus toujours visible
+- SEO : titre, description, Open Graph, données structurées schema.org
+- Aucun script ni feuille de style externe, hormis les polices Google Fonts
+  (repli sur les polices système si elles sont indisponibles)
 
 ## Compatibilité
 
-Chrome, Edge, Firefox, Safari — versions récentes (ordinateur et mobile).
-Les propriétés CSS modernes utilisées (`:has` non requis, `svh`, `mask-image`)
-disposent de replis ou sont purement décoratives.
+Chrome, Edge, Firefox et Safari récents, sur ordinateur comme sur mobile.
+Les fonctions modernes utilisées (`mask-image`, `grid-template-rows` animé, `svh`)
+sont décoratives ou disposent d'un comportement de repli acceptable.
 
 ## Licence
 
