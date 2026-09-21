@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0B0D10">
+
+  <title>EL DOM VISUEL — Studio de création visuelle : miniatures, photo, vidéo</title>
+  <meta name="description" content="EL DOM VISUEL transforme vos idées en images qui marquent : miniatures YouTube, photo studio, tournage, montage et identité de marque. Studio basé à Abomey-Calavi, Bénin.">
+  <meta name="author" content="EL DOM VISUEL">
+  <link rel="canonical" href="https://eldomvisuel.com/">
+
+  <!-- Réseaux sociaux -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="EL DOM VISUEL">
+  <meta property="og:title" content="EL DOM VISUEL — Studio de création visuelle">
+  <meta property="og:description" content="Des miniatures qui cliquent, des images qui marquent, des vidéos qui racontent.">
+  <meta property="og:image" content="https://eldomvisuel.com/assets/img/hero.jpg">
+  <meta property="og:url" content="https://eldomvisuel.com/">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="favicon.svg">
+
+  <!-- Polices -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Données structurées -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "EL DOM VISUEL",
+    "description": "Studio de création visuelle : miniatures, photographie, vidéo, montage et identité de marque.",
+    "url": "https://eldomvisuel.com/",
+    "image": "https://eldomvisuel.com/assets/img/hero.jpg",
+    "email": "contact@eldomvisuel.com",
+    "telephone": "+22900000000",
+    "priceRange": "FCFA",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Abomey-Calavi",
+      "addressCountry": "BJ"
+    },
+    "areaServed": "Bénin",
+    "knowsAbout": ["Miniatures YouTube", "Photographie", "Vidéographie", "Montage vidéo", "Identité de marque"]
+  }
+  </script>
+</head>
+
+<body>
+  <a class="evitement" href="#contenu">Aller au contenu principal</a>
+
+  <!-- Barre de progression de lecture -->
+  <div class="progression" id="progression" aria-hidden="true"></div>
+
+  <!-- =====================================================
+       EN-TÊTE
+       ===================================================== -->
+  <header class="entete" id="entete">
+    <div class="conteneur entete__inner">
+      <a class="marque" href="#accueil" aria-label="EL DOM VISUEL — retour à l'accueil">
+        <img class="marque__sigle" src="assets/img/logo.svg" alt="" width="44" height="44">
+        <span class="marque__texte">
+          <strong>EL DOM</strong>
+          <small>VISUEL</small>
+        </span>
+      </a>
+
+      <nav class="nav" id="nav" aria-label="Navigation principale">
+        <ul>
+          <li><a href="#accueil" class="nav__lien">Accueil</a></li>
+          <li><a href="#services" class="nav__lien">Services</a></li>
+          <li><a href="#realisations" class="nav__lien">Réalisations</a></li>
+          <li><a href="#methode" class="nav__lien">Méthode</a></li>
+          <li><a href="#apropos" class="nav__lien">À propos</a></li>
+          <li><a href="#tarifs" class="nav__lien">Tarifs</a></li>
+          <li><a href="#faq" class="nav__lien">FAQ</a></li>
+        </ul>
+        <a class="btn btn--or btn--petit nav__cta" href="#contact">Devis gratuit</a>
+      </nav>
+
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="contenu">
+
+    <!-- =====================================================
+         ACCUEIL
+         ===================================================== -->
+    <section class="hero" id="accueil">
+      <div class="hero__fond" aria-hidden="true">
+        <img src="assets/img/hero.jpg" alt="" fetchpriority="high" width="1500" height="844">
+      </div>
+      <div class="hero__voile" aria-hidden="true"></div>
+      <div class="hero__lueur" aria-hidden="true"></div>
+
+      <div class="conteneur hero__inner">
+        <p class="surtitre" data-reveal>
+          <span class="point"></span> Studio de création visuelle — Abomey-Calavi, Bénin
+        </p>
+
+        <h1 class="hero__titre" data-reveal>
+          Votre image.<br>
+          <em>Notre signature.</em>
+        </h1>
+
+        <p class="hero__texte" data-reveal>
+          Des miniatures qui donnent envie de cliquer, des photos qui restent en tête,
+          des vidéos qui racontent vraiment quelque chose. EL DOM VISUEL s'occupe de vos
+          visuels de A à Z — de l'idée à la livraison.
+        </p>
+
+        <div class="hero__actions" data-reveal>
+          <a class="btn btn--or" href="#contact">Démarrer un projet</a>
+          <a class="btn btn--fantome" href="#realisations">Voir nos réalisations</a>
+        </div>
+
+        <dl class="hero__stats" data-reveal>
+          <div>
+            <dt>Projets livrés</dt>
+            <dd><span data-compteur="180">0</span>+</dd>
+          </div>
+          <div>
+            <dt>Clients accompagnés</dt>
+            <dd><span data-compteur="45">0</span>+</dd>
+          </div>
+          <div>
+            <dt>Délai de livraison</dt>
+            <dd><span data-compteur="48">0</span>h</dd>
+          </div>
+          <div>
+            <dt>Clients satisfaits</dt>
+            <dd><span data-compteur="98">0</span>%</dd>
+          </div>
+        </dl>
+      </div>
+
+      <a class="hero__defiler" href="#services" aria-label="Défiler vers les services">
+        <span></span>
+      </a>
+    </section>
+
+    <!-- =====================================================
+         BANDEAU DÉFILANT
+         ===================================================== -->
+    <div class="bandeau" aria-hidden="true">
+      <div class="bandeau__piste">
+        <span>Miniatures YouTube</span><i>◆</i>
+        <span>Photographie studio</span><i>◆</i>
+        <span>Clips musicaux</span><i>◆</i>
+        <span>Mariages &amp; événements</span><i>◆</i>
+        <span>Montage &amp; étalonnage</span><i>◆</i>
+        <span>Identité de marque</span><i>◆</i>
+        <span>Miniatures YouTube</span><i>◆</i>
+        <span>Photographie studio</span><i>◆</i>
+        <span>Clips musicaux</span><i>◆</i>
+        <span>Mariages &amp; événements</span><i>◆</i>
+        <span>Montage &amp; étalonnage</span><i>◆</i>
+        <span>Identité de marque</span><i>◆</i>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         SERVICES
+         ===================================================== -->
+    <section class="section" id="services">
+      <div class="conteneur">
+        <div class="section__tete" data-reveal>
+          <p class="surtitre"><span class="point"></span> Ce que nous faisons</p>
+          <h2 class="section__titre">Six savoir-faire, <em>un seul standard</em></h2>
+          <p class="section__intro">
+            Chaque projet passe entre les mêmes mains : les nôtres. Pas de sous-traitance,
+            pas de surprise — juste un travail soigné, du premier croquis à la dernière exportation.
+          </p>
+        </div>
+
+        <div class="services">
+          <article class="carte" data-reveal>
+            <span class="carte__icone" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3z"/>
+              </svg>
+            </span>
+            <h3>Miniatures YouTube</h3>
+            <p>Des vignettes pensées pour le clic : composition claire, contraste fort, visage expressif et texte lisible même en petit.</p>
+            <ul class="carte__liste">
+              <li>3 propositions au choix</li>
+              <li>Formats 16:9 et Shorts</li>
+              <li>Fichier source inclus</li>
+            </ul>
+          </article>
+
+          <article class="carte" data-reveal>
+            <span class="carte__icone" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 8h3l2-3h8l2 3h3v12H3z"/><circle cx="12" cy="13" r="4"/>
+              </svg>
+            </span>
+            <h3>Photographie</h3>
+            <p>Portraits, produits, équipes ou événements : une lumière maîtrisée et une retouche naturelle qui met votre sujet en valeur.</p>
+            <ul class="carte__liste">
+              <li>Studio ou sur site</li>
+              <li>Retouche incluse</li>
+              <li>Livraison en haute définition</li>
+            </ul>
+          </article>
+
+          <article class="carte" data-reveal>
+            <span class="carte__icone" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="6" width="13" height="12" rx="2"/><path d="M15 12l7-4v8z"/>
+              </svg>
+            </span>
+            <h3>Tournage vidéo</h3>
+            <p>Clips, films d'entreprise, interviews, couverture d'événements. Cadrage propre, son net, image stable du début à la fin.</p>
+            <ul class="carte__liste">
+              <li>Repérage et scénario</li>
+              <li>Éclairage et prise de son</li>
+              <li>Tournage multi-caméras</li>
+            </ul>
+          </article>
+
+          <article class="carte" data-reveal>
+            <span class="carte__icone" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 4"/>
+              </svg>
+            </span>
+            <h3>Montage &amp; étalonnage</h3>
+            <p>Le rythme, la couleur, le son. Nous donnons à vos rushes la cohérence et l'émotion qui font tenir un spectateur jusqu'au bout.</p>
+            <ul class="carte__liste">
+              <li>Montage rythmé</li>
+              <li>Étalonnage cinéma</li>
+              <li>Sous-titres et habillage</li>
+            </ul>
+          </article>
+
+          <article class="carte" data-reveal>
+            <span class="carte__icone" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 21s-7-4.6-7-10a7 7 0 0114 0c0 5.4-7 10-7 10z"/><circle cx="12" cy="11" r="2.6"/>
+              </svg>
+            </span>
+            <h3>Mariages &amp; événements</h3>
+            <p>Un regard discret sur les moments forts. Nous captons l'émotion sur le vif, puis nous la racontons dans un film que vous revoyez chaque année.</p>
+            <ul class="carte__liste">
+              <li>Cérémonie et réception</li>
+              <li>Teaser rapide pour les réseaux</li>
+              <li>Galerie photo privée</li>
+            </ul>
+          </article>
+
+          <article class="carte" data-reveal>
+            <span class="carte__icone" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/>
+              </svg>
+            </span>
+            <h3>Identité de marque</h3>
+            <p>Logo, couleurs, typographies, supports imprimés et gabarits réseaux sociaux : une image cohérente sur tous vos points de contact.</p>
+            <ul class="carte__liste">
+              <li>Logo et charte graphique</li>
+              <li>Cartes, flyers, affiches</li>
+              <li>Gabarits pour vos pages</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         RÉALISATIONS
+         ===================================================== -->
+    <section class="section section--alt" id="realisations">
+      <div class="conteneur">
+        <div class="section__tete" data-reveal>
+          <p class="surtitre"><span class="point"></span> Réalisations</p>
+          <h2 class="section__titre">Quelques projets <em>récents</em></h2>
+          <p class="section__intro">
+            Cliquez sur une image pour l'agrandir. Filtrez par type de projet pour voir
+            ce qui ressemble le plus au vôtre.
+          </p>
+        </div>
+
+        <div class="filtres" id="filtres" data-reveal role="group" aria-label="Filtrer les réalisations par catégorie">
+          <button class="filtre est-actif" data-filtre="tout" aria-pressed="true">Tout</button>
+          <button class="filtre" data-filtre="miniatures" aria-pressed="false">Miniatures</button>
+          <button class="filtre" data-filtre="photo" aria-pressed="false">Photo</button>
+          <button class="filtre" data-filtre="video" aria-pressed="false">Vidéo</button>
+          <button class="filtre" data-filtre="evenementiel" aria-pressed="false">Événementiel</button>
+          <button class="filtre" data-filtre="design" aria-pressed="false">Design</button>
+        </div>
+
+        <div class="galerie" id="galerie" data-reveal>
+          <figure class="projet projet--large" data-cat="miniatures" data-titre="Miniature YouTube — chaîne gaming" data-detail="Miniature" tabindex="0" role="button" aria-label="Agrandir : Miniature YouTube chaîne gaming">
+            <img src="assets/img/miniature.jpg" alt="Miniature YouTube colorée pour une chaîne de gaming" loading="lazy" width="1500" height="844">
+            <figcaption>
+              <span class="projet__cat">Miniature</span>
+              <span class="projet__titre">Chaîne gaming — miniature à fort contraste</span>
+            </figcaption>
+          </figure>
+
+          <figure class="projet" data-cat="photo" data-titre="Portrait studio" data-detail="Photographie" tabindex="0" role="button" aria-label="Agrandir : Portrait studio">
+            <img src="assets/img/portrait.jpg" alt="Portrait studio d'une femme sous une lumière dorée" loading="lazy" width="1500" height="844">
+            <figcaption>
+              <span class="projet__cat">Photographie</span>
+              <span class="projet__titre">Portrait studio — lumière beauté</span>
+            </figcaption>
+          </figure>
+
+          <figure class="projet" data-cat="video" data-titre="Clip musical" data-detail="Vidéo" tabindex="0" role="button" aria-label="Agrandir : Clip musical">
+            <img src="assets/img/clip.jpg" alt="Tournage d'un clip musical sous des projecteurs violets" loading="lazy" width="1500" height="844">
+            <figcaption>
+              <span class="projet__cat">Vidéo</span>
+              <span class="projet__titre">Clip musical — tournage studio</span>
+            </figcaption>
+          </figure>
+
+          <figure class="projet" data-cat="evenementiel" data-titre="Mariage" data-detail="Événementiel" tabindex="0" role="button" aria-label="Agrandir : Mariage">
+            <img src="assets/img/mariage.jpg" alt="Couple de mariés entouré de leurs invités au coucher du soleil" loading="lazy" width="1500" height="844">
+            <figcaption>
+              <span class="projet__cat">Événementiel</span>
+              <span class="projet__titre">Mariage — film et galerie photo</span>
+            </figcaption>
+          </figure>
+
+          <figure class="projet" data-cat="video" data-titre="Post-production" data-detail="Vidéo" tabindex="0" role="button" aria-label="Agrandir : Post-production">
+            <img src="assets/img/montage.jpg" alt="Station de montage vidéo avec plusieurs écrans de colorimétrie" loading="lazy" width="1500" height="844">
+            <figcaption>
+              <span class="projet__cat">Vidéo</span>
+              <span class="projet__titre">Montage &amp; étalonnage — post-production</span>
+            </figcaption>
+          </figure>
+
+          <figure class="projet" data-cat="miniatures" data-titre="Miniature podcast" data-detail="Miniature" tabindex="0" role="button" aria-label="Agrandir : Miniature podcast">
+            <img src="assets/img/podcast.jpg" alt="Miniature colorée pour une émission de podcast" loading="lazy" width="1500" height="844">
+            <figcaption>
+              <span class="projet__cat">Miniature</span>
+              <span class="projet__titre">Podcast — vignette d'épisode</span>
+            </figcaption>
+          </figure>
+
+          <figure class="projet" data-cat="design" data-titre="Identité de marque" data-detail="Design" tabindex="0" role="button" aria-label="Agrandir : Identité de marque">
+            <img src="assets/img/branding.jpg" alt="Cartes de visite noires et dorées sur un fond sombre" loading="lazy" width="1500" height="844">
+            <figcaption>
+              <span class="projet__cat">Design</span>
+              <span class="projet__titre">Identité de marque — papeterie</span>
+            </figcaption>
+          </figure>
+
+          <figure class="projet" data-cat="video" data-titre="Conférence" data-detail="Vidéo" tabindex="0" role="button" aria-label="Agrandir : Conférence">
+            <img src="assets/img/evenement.jpg" alt="Conférencier sur scène devant un public" loading="lazy" width="1500" height="844">
+            <figcaption>
+              <span class="projet__cat">Vidéo</span>
+              <span class="projet__titre">Conférence — captation multi-caméras</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         MÉTHODE
+         ===================================================== -->
+    <section class="section" id="methode">
+      <div class="conteneur">
+        <div class="section__tete" data-reveal>
+          <p class="surtitre"><span class="point"></span> Notre méthode</p>
+          <h2 class="section__titre">Quatre étapes, <em>zéro imprévu</em></h2>
+          <p class="section__intro">
+            Un cadre simple pour que vous sachiez toujours où en est votre projet.
+          </p>
+        </div>
+
+        <ol class="etapes">
+          <li class="etape" data-reveal>
+            <span class="etape__num">01</span>
+            <h3>On écoute</h3>
+            <p>Vous nous racontez votre idée, votre public et votre délai. On vous dit franchement ce qui est réaliste — et ce qui servira le mieux votre objectif.</p>
+          </li>
+          <li class="etape" data-reveal>
+            <span class="etape__num">02</span>
+            <h3>On propose</h3>
+            <p>Direction artistique, moodboard, scénario ou maquette : vous validez la piste avant qu'un seul fichier soit produit. Un devis clair accompagne chaque proposition.</p>
+          </li>
+          <li class="etape" data-reveal>
+            <span class="etape__num">03</span>
+            <h3>On produit</h3>
+            <p>Tournage, retouche, montage, déclinaisons. Vous suivez l'avancement et vous recevez une première version pour vos retours.</p>
+          </li>
+          <li class="etape" data-reveal>
+            <span class="etape__num">04</span>
+            <h3>On livre</h3>
+            <p>Fichiers finaux dans tous les formats utiles, sources incluses selon la formule, et un dernier coup d'œil sur les détails avant l'envoi.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         À PROPOS
+         ===================================================== -->
+    <section class="section section--alt" id="apropos">
+      <div class="conteneur apropos">
+        <div class="apropos__visuel" data-reveal>
+          <img src="assets/img/about.jpg" alt="Poste de travail d'EL DOM VISUEL : montage vidéo sur écrans calibrés" loading="lazy" width="1200" height="900">
+          <div class="apropos__badge">
+            <strong>48h</strong>
+            <span>pour une miniature</span>
+          </div>
+        </div>
+
+        <div class="apropos__texte" data-reveal>
+          <p class="surtitre"><span class="point"></span> À propos</p>
+          <h2 class="section__titre">Le studio derrière <em>votre image</em></h2>
+          <p>
+            EL DOM VISUEL est un studio de création visuelle basé à Abomey-Calavi. Nous
+            travaillons avec des créateurs de contenu, des entreprises, des artistes et des
+            familles qui veulent des visuels propres — pas des visuels « vite faits ».
+          </p>
+          <p>
+            Notre conviction est simple : une bonne image ne se remarque pas par sa complexité,
+            mais par sa clarté. On enlève le superflu, on soigne la lumière, on respecte le
+            message. Le reste suit naturellement.
+          </p>
+
+          <ul class="atouts">
+            <li><strong>Interlocuteur unique</strong> — vous parlez directement à la personne qui produit votre projet.</li>
+            <li><strong>Délais tenus</strong> — un calendrier est fixé au départ et respecté jusqu'à la livraison.</li>
+            <li><strong>Matériel maîtrisé</strong> — caméras, optiques et éclairage professionnels, écrans calibrés.</li>
+            <li><strong>Formats prêts à publier</strong> — chaque livrable est décliné pour vos réseaux sociaux.</li>
+          </ul>
+
+          <a class="btn btn--or" href="#contact">Parler de votre projet</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         TÉMOIGNAGES
+         ===================================================== -->
+    <section class="section" id="temoignages">
+      <div class="conteneur">
+        <div class="section__tete" data-reveal>
+          <p class="surtitre"><span class="point"></span> Témoignages</p>
+          <h2 class="section__titre">Ce qu'en disent <em>nos clients</em></h2>
+        </div>
+
+        <div class="temoins" id="temoins" data-reveal>
+          <blockquote class="temoin est-actif">
+            <p>« Ma miniature a été livrée en deux jours et mon taux de clic a doublé sur les vidéos suivantes. Le texte reste lisible même en tout petit sur mobile. »</p>
+            <footer>
+              <cite>Rodrigue A.</cite>
+              <span>Créateur de contenu — gaming</span>
+            </footer>
+          </blockquote>
+
+          <blockquote class="temoin">
+            <p>« Ils ont couvert notre mariage sans jamais se mettre en travers du chemin. Le film nous a fait pleurer dès les trente premières secondes. »</p>
+            <footer>
+              <cite>Clarisse &amp; Fabrice</cite>
+              <span>Mariage, Abomey-Calavi</span>
+            </footer>
+          </blockquote>
+
+          <blockquote class="temoin">
+            <p>« Charte graphique, cartes de visite, gabarits pour nos pages : tout est cohérent depuis. Nos documents ont enfin l'air professionnels. »</p>
+            <footer>
+              <cite>Studio Kpèdo</cite>
+              <span>Agence de services</span>
+            </footer>
+          </blockquote>
+
+          <blockquote class="temoin">
+            <p>« Nous avions des rushes de conférence qu'on n'arrivait pas à exploiter. Le montage final a été utilisé en interne et sur nos réseaux. »</p>
+            <footer>
+              <cite>Mariam B.</cite>
+              <span>Coordinatrice d'événement</span>
+            </footer>
+          </blockquote>
+        </div>
+
+        <div class="temoins__points" id="temoinsPoints" role="group" aria-label="Choisir un témoignage"></div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         TARIFS
+         ===================================================== -->
+    <section class="section section--alt" id="tarifs">
+      <div class="conteneur">
+        <div class="section__tete" data-reveal>
+          <p class="surtitre"><span class="point"></span> Tarifs</p>
+          <h2 class="section__titre">Des formules <em>claires</em></h2>
+          <p class="section__intro">
+            Trois façons de commencer. Besoin de quelque chose de plus précis ?
+            Demandez un devis personnalisé : il est gratuit et sans engagement.
+          </p>
+        </div>
+
+        <div class="tarifs">
+          <article class="tarif" data-reveal>
+            <h3>Essentiel</h3>
+            <p class="tarif__prix"><span>25 000</span> FCFA</p>
+            <p class="tarif__note">Pour lancer une idée rapidement</p>
+            <ul class="tarif__liste">
+              <li>3 miniatures YouTube</li>
+              <li>2 séries de retouches</li>
+              <li>Fichiers HD prêts à publier</li>
+              <li>Livraison sous 72 h</li>
+            </ul>
+            <a class="btn btn--fantome btn--bloc" href="#contact">Demander cette formule</a>
+          </article>
+
+          <article class="tarif tarif--vedette" data-reveal>
+            <span class="tarif__ruban">Le plus choisi</span>
+            <h3>Studio</h3>
+            <p class="tarif__prix"><span>85 000</span> FCFA</p>
+            <p class="tarif__note">Pour un projet complet, image et vidéo</p>
+            <ul class="tarif__liste">
+              <li>Miniatures + direction artistique</li>
+              <li>Séance photo ou tournage (demi-journée)</li>
+              <li>Montage et étalonnage inclus</li>
+              <li>Déclinaisons pour les réseaux sociaux</li>
+              <li>Livraison sous 5 jours</li>
+            </ul>
+            <a class="btn btn--or btn--bloc" href="#contact">Demander cette formule</a>
+          </article>
+
+          <article class="tarif" data-reveal>
+            <h3>Signature</h3>
+            <p class="tarif__prix tarif__prix--devis">Sur devis</p>
+            <p class="tarif__note">Pour les projets d'envergure</p>
+            <ul class="tarif__liste">
+              <li>Équipe et plusieurs jours de tournage</li>
+              <li>Identité de marque complète</li>
+              <li>Clips, films d'entreprise, événements</li>
+              <li>Suivi dédié et retours illimités</li>
+            </ul>
+            <a class="btn btn--fantome btn--bloc" href="#contact">Discuter du projet</a>
+          </article>
+        </div>
+
+        <p class="tarifs__mention" data-reveal>
+          Tarifs de départ, hors déplacement en dehors du Grand Nokoué. Chaque devis est adapté
+          au périmètre réel du projet.
+        </p>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         FAQ
+         ===================================================== -->
+    <section class="section" id="faq">
+      <div class="conteneur">
+        <div class="section__tete" data-reveal>
+          <p class="surtitre"><span class="point"></span> Questions fréquentes</p>
+          <h2 class="section__titre">Tout ce qu'on nous <em>demande souvent</em></h2>
+        </div>
+
+        <div class="faq" id="faqListe" data-reveal>
+          <div class="question">
+            <h3>
+              <button class="question__bouton" aria-expanded="false">
+                <span>Combien de temps prend un projet ?</span>
+                <i aria-hidden="true"></i>
+              </button>
+            </h3>
+            <div class="question__reponse">
+              <p>Une miniature demande généralement 48 à 72 heures. Une séance photo avec retouches compte environ 5 jours. Un tournage vidéo avec montage demande 1 à 3 semaines selon le nombre de jours de tournage et les retours. Le délai exact est confirmé dans le devis, avant de commencer.</p>
+            </div>
+          </div>
+
+          <div class="question">
+            <h3>
+              <button class="question__bouton" aria-expanded="false">
+                <span>Travaillez-vous en dehors d'Abomey-Calavi ?</span>
+                <i aria-hidden="true"></i>
+              </button>
+            </h3>
+            <div class="question__reponse">
+              <p>Oui. Nous intervenons dans tout le Grand Nokoué et partout au Bénin. Pour les projets éloignés, les frais de déplacement sont indiqués dans le devis. Pour les tournages à l'international, parlons-en en amont pour organiser la logistique.</p>
+            </div>
+          </div>
+
+          <div class="question">
+            <h3>
+              <button class="question__bouton" aria-expanded="false">
+                <span>Combien de retours sont possibles ?</span>
+                <i aria-hidden="true"></i>
+            </button>
+            </h3>
+            <div class="question__reponse">
+              <p>Chaque livrable inclut deux séries de retours pour ajuster les détails (texte, cadrage, couleur). Au-delà, un changement de direction artistique ou une nouvelle version complète fait l'objet d'un avenant simple et transparent.</p>
+            </div>
+          </div>
+
+          <div class="question">
+            <h3>
+              <button class="question__bouton" aria-expanded="false">
+                <span>Recevons-nous les fichiers sources ?</span>
+                <i aria-hidden="true"></i>
+              </button>
+            </h3>
+            <div class="question__reponse">
+              <p>Les miniatures sont livrées avec le fichier éditable. Pour la vidéo, les rushes et le projet de montage peuvent être cédés selon la formule choisie — précisez-le au moment du devis pour que ce soit écrit noir sur blanc.</p>
+            </div>
+          </div>
+
+          <div class="question">
+            <h3>
+              <button class="question__bouton" aria-expanded="false">
+                <span>Comment se passe le paiement ?</span>
+                <i aria-hidden="true"></i>
+              </button>
+            </h3>
+            <div class="question__reponse">
+              <p>Un acompte de 50 % lance le projet, le solde est réglé à la livraison des fichiers finaux. Mobile Money et virement sont acceptés. Un document récapitulatif est fourni pour chaque paiement.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         CONTACT
+         ===================================================== -->
+    <section class="section section--contact" id="contact">
+      <div class="conteneur">
+        <div class="contact">
+          <div class="contact__infos" data-reveal>
+            <p class="surtitre"><span class="point"></span> Contact</p>
+            <h2 class="section__titre">Parlons de <em>votre projet</em></h2>
+            <p class="contact__intro">
+              Décrivez votre besoin en quelques lignes : nous revenons vers vous avec une
+              proposition et un délai. Réponse sous 24 heures ouvrées.
+            </p>
+
+            <ul class="coord">
+              <li>
+                <span class="coord__icone" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16.9v2.6a1.4 1.4 0 01-1.6 1.4A17.6 17.6 0 013 5.6 1.4 1.4 0 014.4 4h2.6a1.4 1.4 0 011.4 1.2c.1.9.3 1.7.6 2.5a1.4 1.4 0 01-.3 1.5l-1.1 1.1a14 14 0 006.1 6.1l1.1-1.1a1.4 1.4 0 011.5-.3c.8.3 1.6.5 2.5.6a1.4 1.4 0 011.2 1.3z"/></svg>
+                </span>
+                <span>
+                  <strong>Téléphone / WhatsApp</strong>
+                  <a href="tel:+22900000000">+229 00 00 00 00</a>
+                </span>
+              </li>
+              <li>
+                <span class="coord__icone" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
+                </span>
+                <span>
+                  <strong>E-mail</strong>
+                  <a href="mailto:contact@eldomvisuel.com">contact@eldomvisuel.com</a>
+                </span>
+              </li>
+              <li>
+                <span class="coord__icone" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-7-10a7 7 0 0114 0c0 5.4-7 10-7 10z"/><circle cx="12" cy="11" r="2.6"/></svg>
+                </span>
+                <span>
+                  <strong>Studio</strong>
+                  <p>Abomey-Calavi, Bénin — interventions sur site</p>
+                </span>
+              </li>
+              <li>
+                <span class="coord__icone" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                </span>
+                <span>
+                  <strong>Horaires</strong>
+                  <p>Lundi – Samedi, 8h – 19h</p>
+                </span>
+              </li>
+            </ul>
+
+            <div class="contact__reseaux">
+              <a href="#" aria-label="Facebook">Facebook</a>
+              <a href="#" aria-label="Instagram">Instagram</a>
+              <a href="#" aria-label="TikTok">TikTok</a>
+              <a href="#" aria-label="YouTube">YouTube</a>
+            </div>
+          </div>
+
+          <form class="formulaire" id="formulaire" novalidate data-reveal>
+            <h3 class="formulaire__titre">Demander un devis</h3>
+
+            <div class="champ">
+              <label for="nom">Nom complet <abbr title="requis">*</abbr></label>
+              <input type="text" id="nom" name="nom" placeholder="Ex. Adjovi Kofi" autocomplete="name" required>
+              <small class="champ__erreur" data-erreur></small>
+            </div>
+
+            <div class="champ">
+              <label for="tel">Téléphone / WhatsApp</label>
+              <input type="tel" id="tel" name="tel" placeholder="+229 …" autocomplete="tel">
+              <small class="champ__erreur" data-erreur></small>
+            </div>
+
+            <div class="champ">
+              <label for="service">Type de projet <abbr title="requis">*</abbr></label>
+              <select id="service" name="service" required>
+                <option value="">Choisissez…</option>
+                <option>Miniature YouTube</option>
+                <option>Photographie</option>
+                <option>Tournage vidéo</option>
+                <option>Montage &amp; étalonnage</option>
+                <option>Mariage / événement</option>
+                <option>Identité de marque</option>
+                <option>Autre</option>
+              </select>
+              <small class="champ__erreur" data-erreur></small>
+            </div>
+
+            <div class="champ">
+              <label for="budget">Budget estimé</label>
+              <select id="budget" name="budget">
+                <option value="">Je ne sais pas encore</option>
+                <option>Moins de 25 000 FCFA</option>
+                <option>25 000 – 85 000 FCFA</option>
+                <option>85 000 – 300 000 FCFA</option>
+                <option>Plus de 300 000 FCFA</option>
+              </select>
+            </div>
+
+            <div class="champ">
+              <label for="message">Votre projet <abbr title="requis">*</abbr></label>
+              <textarea id="message" name="message" rows="5" placeholder="Décrivez en quelques lignes ce que vous souhaitez, la date et les formats attendus." required></textarea>
+              <small class="champ__erreur" data-erreur></small>
+            </div>
+
+            <button class="btn btn--or btn--bloc" type="submit">Envoyer via WhatsApp</button>
+            <p class="formulaire__aide">
+              Le bouton ouvre WhatsApp avec votre message déjà rédigé.
+              Vous pouvez aussi nous écrire à <a href="mailto:contact@eldomvisuel.com">contact@eldomvisuel.com</a>.
+            </p>
+            <p class="formulaire__statut" id="statut" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =====================================================
+       PIED DE PAGE
+       ===================================================== -->
+  <footer class="pied">
+    <div class="conteneur pied__inner">
+      <div class="pied__marque">
+        <img src="assets/img/logo.svg" alt="" width="40" height="40">
+        <span>
+          <strong>EL DOM VISUEL</strong>
+          <small>Studio de création visuelle — Bénin</small>
+        </span>
+      </div>
+
+      <nav class="pied__nav" aria-label="Liens de pied de page">
+        <a href="#services">Services</a>
+        <a href="#realisations">Réalisations</a>
+        <a href="#tarifs">Tarifs</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <p class="pied__legal">
+        © <span id="annee">2026</span> EL DOM VISUEL. Tous droits réservés.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Bouton WhatsApp flottant -->
+  <a class="whatsapp" id="whatsapp" href="#" aria-label="Écrire sur WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.4A10 10 0 1012 2zm0 2a8 8 0 016.3 12.9l-.3.4.6 2.1-2.2-.6-.4.2A8 8 0 1112 4zm-3.3 4c-.3 0-.7.1-1 .5-.4.4-.8 1-.8 1.9s.5 1.9 1.6 3c1.1 1.2 2.4 1.9 3.7 2.2 1 .2 1.5.2 2 0 .5-.1 1.1-.6 1.3-1.1.2-.5.2-1 .1-1.1-.1-.1-.3-.2-.6-.3l-1.3-.6c-.2-.1-.4-.1-.5.1l-.6.8c-.1.2-.3.2-.5.1-.4-.2-1-.5-1.6-1.1-.5-.5-.8-1-1-1.3-.1-.2 0-.4.1-.5l.4-.5c.1-.2.2-.3.1-.5l-.6-1.4c-.2-.4-.4-.4-.6-.4z"/></svg>
+  </a>
+
+  <!-- Flèche retour en haut -->
+  <button class="haut" id="haut" aria-label="Retour en haut de page">↑</button>
+
+  <!-- =====================================================
+       VISIONNEUSE PLEIN ÉCRAN
+       ===================================================== -->
+  <div class="visionneuse" id="visionneuse" role="dialog" aria-modal="true" aria-label="Aperçu du projet" hidden>
+    <button class="visionneuse__fermer" id="visionneuseFermer" aria-label="Fermer">&times;</button>
+    <button class="visionneuse__nav visionneuse__nav--prec" id="visionneusePrec" aria-label="Projet précédent">&#8249;</button>
+    <figure>
+      <img id="visionneuseImg" src="" alt="">
+      <figcaption id="visionneuseLegende"></figcaption>
+    </figure>
+    <button class="visionneuse__nav visionneuse__nav--suiv" id="visionneuseSuiv" aria-label="Projet suivant">&#8250;</button>
+  </div>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
